@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karimjee Executive Diary</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Red Hat Text',system-ui,sans-serif;background:#f4f1eb;min-height:100vh;padding:16px}
+#diary-app{max-width:1200px;margin:0 auto}
+</style>
+</head>
+<body>
+<div id="diary-app"></div>
+<script>
+const DS=new Date("2026-06-15"),DE=new Date("2027-06-14"),TODAY=new Date("2026-06-22");
+const TASKS=[
+  {id:"t1",title:"Complete group departmental budgets",date:"2026-06-22",type:"task",taskType:"mine",done:false},
+  {id:"t2",title:"Corporate calendar",date:"2026-06-22",type:"task",taskType:"mine",done:false},
+  {id:"t3",title:"Board presentation",date:"2026-06-22",type:"task",taskType:"mine",done:true},
+  {id:"t4",title:"Questions for Amir",date:"2026-06-22",type:"task",taskType:"mine",done:false},
+  {id:"t8",title:"Complete board statutory pack",date:"2026-06-22",type:"task",taskType:"mine",done:false},
+  {id:"t10",title:"Follow-up: Abdul on IT security review",date:"2026-06-23",type:"task",taskType:"followup",done:false},
+  {id:"t11",title:"Follow-up: Mostafa on Auto Inc designs",date:"2026-06-24",type:"task",taskType:"followup",done:false},
+];
+const CAL=[
+  {"title":"Weekly GCOO Team Meeting","date":"2026-06-15","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-06-16","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Private Appointment","date":"2026-06-16","startTime":"10:30","endTime":"11:30","type":"meeting","location":""},
+  {"title":"Future HR Interventions - Part 2","date":"2026-06-16","startTime":"15:00","endTime":"17:00","type":"meeting","location":"Online"},
+  {"title":"Motormat Strategy Synthesis","date":"2026-06-17","startTime":"12:00","endTime":"13:00","type":"meeting","location":"Virtual"},
+  {"title":"Auto Inc Strategy Synthesis","date":"2026-06-17","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Virtual"},
+  {"title":"Board Prep Alignment","date":"2026-06-17","startTime":"15:00","endTime":"15:30","type":"meeting","location":""},
+  {"title":"EV network pilot & IT review | Kahama B","date":"2026-06-19","startTime":"10:00","endTime":"11:30","type":"meeting","location":"In person"},
+  {"title":"HR Strategy","date":"2026-06-19","startTime":"11:00","endTime":"12:00","type":"meeting","location":"Virtual"},
+  {"title":"Private Appointment","date":"2026-06-19","startTime":"11:00","endTime":"12:00","type":"meeting","location":""},
+  {"title":"Group Operations Team Meeting","date":"2026-06-19","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Private Appointment","date":"2026-06-22","startTime":"10:30","endTime":"11:30","type":"meeting","location":""},
+  {"title":"Buses for Indian School","date":"2026-06-22","startTime":"11:30","endTime":"12:30","type":"meeting","location":"Virtual"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-06-22","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-06-23","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"AIPX & Compliance Debrief","date":"2026-06-23","startTime":"13:00","endTime":"13:30","type":"meeting","location":"Virtual"},
+  {"title":"Group Operations Team Meeting","date":"2026-06-26","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"PC&D sessions","date":"2026-06-26","startTime":"15:30","endTime":"16:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-06-29","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-06-30","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-07-03","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-07-06","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-07-07","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Projects Workshop","date":"2026-07-09","startTime":"09:00","endTime":"17:30","type":"meeting","location":"In person - TBC"},
+  {"title":"Group Operations Team Meeting","date":"2026-07-10","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"PC&D sessions","date":"2026-07-10","startTime":"15:30","endTime":"16:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-07-13","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-07-14","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-07-17","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-07-20","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-07-21","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-07-24","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"PC&D sessions","date":"2026-07-24","startTime":"15:30","endTime":"16:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-07-27","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-07-28","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-07-31","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-08-03","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-08-04","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-08-07","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-08-10","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-08-11","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-08-14","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-08-17","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-08-18","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-08-21","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-08-24","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-08-25","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-08-28","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-08-31","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-09-01","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-09-04","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-09-07","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-09-08","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-09-11","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-09-14","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-09-15","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-09-18","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-09-21","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-09-22","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-09-25","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-09-28","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-09-29","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-10-02","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-10-05","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-10-06","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-10-09","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-10-12","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-10-13","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-10-16","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-10-19","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-10-20","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-10-23","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-10-26","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-10-27","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-10-30","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-11-02","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-11-03","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-11-06","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-11-09","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-11-10","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-11-13","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-11-16","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-11-17","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
+  {"title":"Group Operations Team Meeting","date":"2026-11-20","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-11-23","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2026-11-27","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-11-30","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2026-12-04","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-12-07","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2026-12-11","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-12-14","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2026-12-18","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-12-21","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2026-12-25","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2026-12-28","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-01-01","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-01-04","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-01-08","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-01-11","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-01-15","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-01-18","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-01-22","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-01-25","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-01-29","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-02-01","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-02-05","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-02-08","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-02-12","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-02-15","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-02-19","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-02-22","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-02-26","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-03-01","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-03-05","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-03-08","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-03-12","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-03-15","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-03-19","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-03-22","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-03-26","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-03-29","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-04-02","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-04-05","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-04-09","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-04-12","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-04-16","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-04-19","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-04-23","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-04-26","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-04-30","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
+  {"title":"Weekly GCOO Team Meeting","date":"2027-05-03","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
+  {"title":"Group Operations Team Meeting","date":"2027-05-07","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"}
+];
+const ALL=[...TASKS,...CAL];
+function fmtYMD(d){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),dd=String(d.getDate()).padStart(2,"0");return`${y}-${m}-${dd}`;}
+function addD(d,n){const r=new Date(d);r.setDate(r.getDate()+n);return r;}
+function getMon(d){const r=new Date(d);r.setHours(0,0,0,0);const dw=r.getDay();r.setDate(r.getDate()+(dw===0?-6:1-dw));return r;}
+function clamp(d,lo,hi){return d<lo?lo:d>hi?hi:d;}
+function toM(s){if(!s)return null;const[h,m]=s.split(":").map(Number);return h*60+m;}
+function wkN(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const dn=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-dn);const ys=new Date(Date.UTC(t.getUTCFullYear(),0,1));return Math.ceil((((t-ys)/86400000)+1)/7);}
+function doy(d){return Math.floor((d-new Date(d.getFullYear(),0,0))/86400000);}
+function isLp(y){return y%4===0&&(y%100!==0||y%400===0);}
+const MN=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const MS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DN=["Mon","Tue","Wed","Thu","Fri","Sat"];
+const SL=[];for(let h=7;h<=20;h++){SL.push({h,m:0,lbl:h+":00",half:false});if(h<20)SL.push({h,m:30,lbl:"",half:true});}
+const SH=17;
+let wkS=getMon(clamp(TODAY,DS,DE));
+function gE(ds){return ALL.filter(e=>e.date===ds);}
+function miniCal(yr,mo,wkDates){
+  const dim=new Date(yr,mo+1,0).getDate(),fd=new Date(yr,mo,1).getDay(),off=fd===0?6:fd-1;
+  const ts=fmtYMD(TODAY),ws=new Set(wkDates.map(fmtYMD));
+  let h=`<div style="font-size:8px"><div style="font-weight:700;color:#034078;text-align:center;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px">${MS[mo]} ${yr}</div><div style="display:grid;grid-template-columns:repeat(7,13px);gap:1px;text-align:center">`;
+  ["M","T","W","T","F","S","S"].forEach(d=>{h+=`<div style="font-size:7px;color:#8A9AB0;font-weight:600">${d}</div>`;});
+  for(let i=0;i<off;i++)h+=`<div style="width:13px;height:13px"></div>`;
+  for(let d=1;d<=dim;d++){
+    const ds=`${yr}-${String(mo+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const iT=ds===ts,iC=!iT&&ws.has(ds);
+    h+=`<div style="width:13px;height:13px;line-height:13px;font-size:7px;border-radius:${iT?"50%":"2px"};background:${iT?"#034078":iC?"#e8f0f7":"transparent"};color:${iT?"#fff":iC?"#034078":"#8A9AB0"}">${d}</div>`;
+  }
+  return h+`</div></div>`;}
+function dayCol(date,isLast){
+  const ds=fmtYMD(date),isT=ds===fmtYMD(TODAY);
+  const di=date.getDay()===0?6:date.getDay()-1;
+  const yr=date.getFullYear(),rem=(isLp(yr)?366:365)-doy(date);
+  const evts=gE(ds),tEvts=evts.filter(e=>e.type==="meeting"&&e.startTime),tkEvts=evts.filter(e=>e.type==="task"),aEvts=evts.filter(e=>e.isAllDay);
+  const GS=7*60,gridH=SL.length*SH;
+  const nb=isT?"#034078":"#fff",nt=isT?"#fff":"#034078",ns=isT?"rgba(255,255,255,0.65)":"#8A9AB0";
+  let slots="";
+  SL.forEach((s,i)=>{slots+=`<div style="position:absolute;top:${i*SH}px;left:0;right:0;height:${SH}px;border-bottom:${s.half?"1px dashed #ebe8e0":"1px solid #D5D0C8"};display:flex;align-items:flex-start"><span style="font-size:7px;color:#B0A898;padding-left:2px;min-width:22px;margin-top:1px;line-height:9px">${s.half?"":s.lbl}</span></div>`;});
+  let evts2="";
+  tEvts.forEach(e=>{
+    const ms=toM(e.startTime),me=toM(e.endTime);
+    const top=Math.round(((ms-GS)/30)*SH),ht=Math.max(SH,Math.round(((me-ms)/30)*SH));
+    evts2+=`<div title="${e.title}${e.location?" | "+e.location:""}" style="position:absolute;top:${top}px;left:24px;right:2px;height:${ht}px;background:#034078;color:#fff;border-left:2px solid #C9922A;border-radius:2px;font-size:7px;padding:1px 3px;overflow:hidden;z-index:1"><div style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.startTime}–${e.endTime}</div><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.9">${e.title}</div></div>`;
+  });
+  const nl=tkEvts.map(t=>({tx:"• "+t.title,fu:t.taskType==="followup",dn:!!t.done}));
+  while(nl.length<10)nl.push({empty:true});
+  let notes=`<div style="border-top:2px solid #034078;padding:3px 4px;flex:1"><div style="font-size:7px;color:#8A9AB0;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">notes</div>`;
+  nl.slice(0,10).forEach(l=>{
+    const c=l.empty?"transparent":l.dn?"#B0A898":l.fu?"#034078":"#111";
+    notes+=`<div style="font-size:8px;border-bottom:1px solid #E5E0D8;min-height:12px;padding:1px 0;line-height:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:${c};text-decoration:${l.dn?"line-through":"none"};font-style:${l.fu?"italic":"normal"};font-weight:${l.empty?400:500}">${l.empty?"—":l.tx}</div>`;
+  });
+  notes+=`</div>`;
+  return `<div style="flex:1;min-width:0;border-right:${isLast?"none":"1px solid #E5E0D8"};display:flex;flex-direction:column">
+    <div style="padding:4px 5px;border-bottom:2px solid #034078;background:${nb};flex-shrink:0">
+      <div style="font-size:16px;font-weight:800;color:${nt};line-height:1">${date.getDate()}</div>
+      <div style="font-size:7px;text-transform:uppercase;color:${ns};letter-spacing:.08em">${DN[di]}</div>
+      <div style="font-size:7px;color:${ns}">${doy(date)}·${rem}</div>
+    </div>
+    <div style="min-height:12px;border-bottom:1px solid #E5E0D8;padding:1px 3px;flex-shrink:0">${aEvts.map(e=>`<div style="background:#e8f0f7;color:#034078;border-left:2px solid #034078;border-radius:2px;font-size:7px;padding:1px 3px;margin:1px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title}</div>`).join("")}</div>
+    <div style="position:relative;height:${gridH}px;flex-shrink:0;overflow:hidden">${slots}${evts2}</div>
+    ${notes}
+  </div>`;}
+function sunCol(date){
+  const yr=date.getFullYear(),rem=(isLp(yr)?366:365)-doy(date);
+  return `<div style="width:62px;background:#f0f5fa;border-left:1px solid #E5E0D8;padding:5px 3px;flex-shrink:0">
+    <div style="font-size:16px;font-weight:800;color:#034078;text-align:center">${date.getDate()}</div>
+    <div style="font-size:7px;text-transform:uppercase;color:#8A9AB0;text-align:center;letter-spacing:.08em">Sun</div>
+    <div style="font-size:7px;color:#8A9AB0;text-align:center;margin-top:3px">${doy(date)}·${rem}</div>
+  </div>`;}
+function render(){
+  const days=Array.from({length:6},(_,i)=>addD(wkS,i)),sun=addD(wkS,6),wkD=[...days,sun];
+  const fd=days[0],wn=wkN(wkS),mc2=new Date(fd.getFullYear(),fd.getMonth()+1,1),mc3=new Date(fd.getFullYear(),fd.getMonth()+2,1);
+  const wl=fd.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
+  const sp=Array.from({length:16},()=>`<div style="width:11px;height:11px;border-radius:50%;border:1px solid rgba(255,255,255,.45);background:#1a5c8a;margin:2px 0"></div>`).join("");
+  document.getElementById("diary-app").innerHTML=`
+  <div style="background:#034078;padding:8px 12px;display:flex;align-items:center;gap:8px;border-radius:8px 8px 0 0;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:7px;margin-right:auto">
+      <svg width="24" height="24" viewBox="0 0 1080 1080" fill="none"><path d="M728.07,324.81c-21.48-11.7-45.84-18.4-71.76-18.4H378.28c-15.17,0-27.47,12.3-27.47,27.47v0c0,15.17,12.3,27.47,27.47,27.47h278.03c55.36,0,100.24,44.88,100.24,100.24v155.81c0,55.36-44.88,100.24-100.24,100.24h-78.21l-121.82-110.42h78.21c15.17,0,27.47-12.3,27.47-27.47v0c0-15.17-12.3-27.47-27.47-27.47H378.28c-15.17,0-27.47,12.3-27.47,27.47v183.28c0,15.17,12.3,27.47,27.47,27.47h0c15.17,0,27.47-12.3,27.47-27.47v-45.34h61.88l173.27,157.09c11.86,10.75,27.22,16.72,43.19,16.72h172.28c82.95,0,150.24-67.29,150.24-150.24V461.57C1006.61,401.31,874.97,268.5,728.07,324.81z" fill="white"/><path d="M351.27,611.45v-183.5" stroke="white" stroke-width="30" stroke-linecap="round"/><circle cx="351.27" cy="267" r="22" fill="white" opacity="0.6"/></svg>
+      <div><div style="color:rgba(255,255,255,.4);font-size:6px;letter-spacing:.22em;font-weight:500;text-transform:uppercase">Est 1825</div><div style="color:#fff;font-size:11px;font-weight:700;letter-spacing:.25em;text-transform:uppercase">Karimjee</div></div>
+      <div style="color:rgba(255,255,255,.7);font-size:10px;border-left:1px solid rgba(255,255,255,.25);padding-left:8px;margin-left:3px">Executive Diary</div>
+    </div>
+    <button onclick="nav(-1)" style="background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px">← Prev</button>
+    <span style="color:#fff;font-weight:600;font-size:11px;min-width:155px;text-align:center">Week of ${wl}</span>
+    <button onclick="nav(1)" style="background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px">Next →</button>
+    <button onclick="goT()" style="background:#fff;border:1px solid #fff;color:#034078;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:700">Today</button>
+    <input id="ji" placeholder="DD/MM/YYYY" onkeydown="if(event.key==='Enter')jmp(this.value)" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;padding:4px 8px;border-radius:4px;font-size:11px;width:93px">
+  </div>
+  <div style="background:#f0f5fa;padding:7px 12px;display:flex;align-items:center;border-bottom:2px solid #034078">
+    <span style="color:#034078;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.11em;flex:1">${MN[fd.getMonth()]} ${fd.getFullYear()}</span>
+    <span style="color:#8A9AB0;font-size:10px;margin-right:12px">Week ${wn}</span>
+    <div style="display:flex;gap:10px">${miniCal(fd.getFullYear(),fd.getMonth(),wkD)}${miniCal(mc2.getFullYear(),mc2.getMonth(),wkD)}${miniCal(mc3.getFullYear(),mc3.getMonth(),wkD)}</div>
+  </div>
+  <div style="display:flex;overflow-x:auto">
+    <div style="flex:1;min-width:0;background:#FDFCF9"><div style="display:flex;border-top:1px solid #E5E0D8">${days.slice(0,3).map((d,i)=>dayCol(d,i===2)).join("")}</div></div>
+    <div style="width:15px;background:#034078;flex-shrink:0;display:flex;flex-direction:column;justify-content:space-around;align-items:center;padding:3px 0">${sp}</div>
+    <div style="flex:1;min-width:0;background:#FAF8F4;display:flex"><div style="flex:1;min-width:0"><div style="display:flex;border-top:1px solid #E5E0D8">${days.slice(3,6).map((d,i)=>dayCol(d,i===2)).join("")}</div></div>${sunCol(sun)}</div>
+  </div>
+  <div style="height:4px;background:#034078;border-radius:0 0 8px 8px"></div>`;}
+function nav(d){wkS=getMon(clamp(addD(wkS,d*7),DS,DE));render();}
+function goT(){wkS=getMon(clamp(TODAY,DS,DE));render();}
+function jmp(v){const p=v.split("/");if(p.length===3){const d=new Date(parseInt(p[2]),parseInt(p[1])-1,parseInt(p[0]));if(!isNaN(d)){wkS=getMon(clamp(d,DS,DE));render();}}}
+render();
+</script>
+</body>
+</html>
