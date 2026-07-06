@@ -27,7 +27,7 @@ const TASKS=[
   {id:"t21",title:"Ken slide to John's scope",date:"2026-06-25",type:"task",taskType:"mine",done:true},
   {id:"t22",title:"Indian School RFP",date:"2026-06-24",type:"task",taskType:"mine",done:true},
   {id:"t23",title:"Indian School Survey",date:"2026-06-25",type:"task",taskType:"mine",done:true},
-  {id:"t16",title:"Workshop deck",date:"2026-07-06",type:"task",taskType:"mine",done:false},
+  {id:"t16",title:"Workshop deck",date:"2026-07-06",type:"task",taskType:"urgent",done:false},
   {id:"t1",title:"Complete group departmental budgets",date:"2026-06-25",type:"task",taskType:"mine",done:true},
   {id:"t20",title:"Add procurement, Marketing, HR & digital workshops",date:"2026-07-10",type:"task",taskType:"mine",done:false},
   {id:"t17",title:"Follow-up: Grace prepare F&B for workshop",date:"2026-06-26",type:"task",taskType:"followup",done:true},
@@ -65,7 +65,8 @@ const TASKS=[
   {id:"t37",title:"Tell Mostafa on digital screen",date:"2026-07-06",type:"task",taskType:"followup",done:false},
   {id:"t38",title:"Discuss P/L & B/S with Amir",date:"2026-07-06",type:"task",taskType:"mine",done:true},
   {id:"t40",title:"Review GCOO team notes",date:"2026-07-06",type:"task",taskType:"mine",done:false},
-  {id:"t41",title:"Confirm wholesale workshop",date:"2026-07-06",type:"task",taskType:"mine",done:false},
+  {id:"t41",title:"Confirm wholesale workshop",date:"2026-07-06",type:"task",taskType:"urgent",done:false},
+  {id:"t42",title:"Review Auto Inc PMO",date:"2026-07-06",type:"task",taskType:"urgent",done:false},
 ];
 const CAL=[
   {"title":"Weekly GCOO Team Meeting","date":"2026-06-15","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
@@ -260,11 +261,11 @@ function dayCol(date,isLast){
     const top=Math.round(((ms-GS)/30)*SH),ht=Math.max(SH,Math.round(((me-ms)/30)*SH));
     evts2+=`<div title="${e.title}${e.location?" | "+e.location:""}" style="position:absolute;top:${top}px;left:24px;right:2px;height:${ht}px;background:#034078;color:#fff;border-left:2px solid #C9922A;border-radius:2px;font-size:7px;padding:1px 3px;overflow:hidden;z-index:1"><div style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.startTime}–${e.endTime}</div><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.9">${e.title}</div></div>`;
   });
-  const nl=tkEvts.map(t=>({tx:"• "+t.title,fu:t.taskType==="followup",dn:!!t.done}));
+  const nl=tkEvts.map(t=>({tx:"• "+t.title,fu:t.taskType==="followup",ur:t.taskType==="urgent",dn:!!t.done}));
   while(nl.length<10)nl.push({empty:true});
   let notes=`<div style="border-top:2px solid #034078;padding:3px 4px;flex:1"><div style="font-size:7px;color:#8A9AB0;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">notes</div>`;
   nl.slice(0,10).forEach(l=>{
-    const c=l.empty?"transparent":l.dn?"#B0A898":l.fu?"#034078":"#111";
+    const c=l.empty?"transparent":l.dn?"#B0A898":l.ur?"#C0392B":l.fu?"#034078":"#111";
     notes+=`<div style="font-size:8px;border-bottom:1px solid #E5E0D8;min-height:12px;padding:1px 0;line-height:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:${c};text-decoration:${l.dn?"line-through":"none"};font-style:${l.fu?"italic":"normal"};font-weight:${l.empty?400:500}">${l.empty?"—":l.tx}</div>`;
   });
   notes+=`</div>`;
