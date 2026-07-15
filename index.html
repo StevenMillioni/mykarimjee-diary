@@ -54,6 +54,8 @@ button:hover { background: #002d5f; }
   border-radius: 4px;
   overflow: hidden;
   font-size: 12px;
+  display: flex;
+  flex-direction: column;
 }
 
 .day-header {
@@ -63,6 +65,7 @@ button:hover { background: #002d5f; }
   text-align: center;
   font-weight: bold;
   font-size: 11px;
+  flex-shrink: 0;
 }
 
 .day-header.today {
@@ -70,7 +73,8 @@ button:hover { background: #002d5f; }
 }
 
 .time-slots {
-  max-height: 600px;
+  flex: 1;
+  max-height: 500px;
   overflow-y: auto;
   background: #fafaf8;
 }
@@ -78,18 +82,19 @@ button:hover { background: #002d5f; }
 .time-slot {
   display: flex;
   border-bottom: 1px solid #eee;
-  min-height: 30px;
+  min-height: 28px;
 }
 
 .time-label {
-  width: 40px;
+  width: 35px;
   padding: 2px 2px;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 600;
   color: #666;
-  background: #f0f0f0;
+  background: #f5f5f5;
   border-right: 1px solid #ddd;
-  line-height: 1.2;
+  line-height: 1.1;
+  flex-shrink: 0;
 }
 
 .time-content {
@@ -98,23 +103,26 @@ button:hover { background: #002d5f; }
   font-size: 9px;
   color: #333;
   overflow: hidden;
-  border-right: 1px solid #eee;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .notes-section {
   padding: 6px;
   background: #fff9f5;
   border-top: 1px solid #ddd;
-  min-height: 80px;
+  min-height: 70px;
   max-height: 100px;
   overflow-y: auto;
-  font-size: 10px;
+  font-size: 9px;
+  flex-shrink: 0;
 }
 
 .task {
   margin: 2px 0;
   padding: 2px 4px;
   border-radius: 2px;
+  line-height: 1.2;
 }
 
 .task.urgent {
@@ -158,7 +166,7 @@ button:hover { background: #002d5f; }
   background: white;
   border-radius: 3px;
   border-left: 3px solid #034078;
-  font-size: 11px;
+  font-size: 10px;
 }
 </style>
 </head>
@@ -178,9 +186,10 @@ button:hover { background: #002d5f; }
 <script>
 const DS=new Date("2026-06-15"),DE=new Date("2027-06-14");
 let TODAY=new Date();TODAY.setHours(0,0,0,0);
-let wkS=new Date(TODAY);
+let wkStart=getMondayOfWeek(TODAY);
 
-const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const dayShort=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 const TASKS=[
@@ -213,7 +222,17 @@ const CAL=[
   {title:"Planning: Finance Strategy Workshop",date:"2026-07-15",start:"11:00",end:"12:00"}
 ];
 
-function getMon(d){const c=new Date(d);c.setDate(c.getDate()-(c.getDay()||7)+1);return c}
+// CRITICAL FIX: Get Monday of the week correctly
+// Day 0 = Sunday, 1 = Monday, etc.
+function getMondayOfWeek(d){
+  const date=new Date(d);
+  const day=date.getDay();
+  // If Sunday (0), go back 6 days. Otherwise go back (day-1) days
+  const diff=day===0?-6:1-day;
+  date.setDate(date.getDate()+diff);
+  return date;
+}
+
 function addD(d,n){const c=new Date(d);c.setDate(c.getDate()+n);return c}
 function dStr(d){return d.getDate()+' '+months[d.getMonth()]}
 
@@ -224,7 +243,7 @@ function renderDay(d,dIdx){
   
   let html=`<div class="day-column">
     <div class="day-header ${isToday?'today':''}">
-      ${days[d.getDay()]} ${dStr(d)}
+      ${dayShort[d.getDay()]} ${dStr(d)}
     </div>
     <div class="time-slots">`;
   
@@ -257,28 +276,31 @@ function renderDay(d,dIdx){
 }
 
 function render(){
-  const we=addD(wkS,6);
   let html=`<div class="spread">`;
   
-  // Left page: Mon-Wed
+  // Left page: MONDAY, TUESDAY, WEDNESDAY (days 1, 2, 3 of week)
   html+=`<div class="page">`;
-  for(let i=1;i<4;i++) html+=renderDay(addD(wkS,i),'mon-wed');
+  html+=renderDay(addD(wkStart,1),'mon');
+  html+=renderDay(addD(wkStart,2),'tue');
+  html+=renderDay(addD(wkStart,3),'wed');
   html+=`</div>`;
   
-  // Right page: Thu-Sat
+  // Right page: THURSDAY, FRIDAY, SATURDAY (days 4, 5, 6 of week)
   html+=`<div class="page">`;
-  for(let i=4;i<7;i++) html+=renderDay(addD(wkS,i),'thu-sat');
+  html+=renderDay(addD(wkStart,4),'thu');
+  html+=renderDay(addD(wkStart,5),'fri');
+  html+=renderDay(addD(wkStart,6),'sat');
   html+=`</div>`;
   
   html+=`</div>`;
   
-  // Sunday
-  const sun=addD(wkS,6);
+  // SUNDAY (day 0 of week, which is last day)
+  const sun=addD(wkStart,0);
   const sunTasks=TASKS.filter(t=>new Date(t.date).toDateString()===sun.toDateString());
   const sunEvents=CAL.filter(e=>new Date(e.date).toDateString()===sun.toDateString());
   
   html+=`<div class="sunday-row">
-    <h3>${days[sun.getDay()]} ${dStr(sun)}</h3>
+    <h3>Sunday ${dStr(sun)}</h3>
     <div class="sunday-tasks">`;
   
   const allSunTasks=[...sunTasks.filter(t=>!t.done),...sunTasks.filter(t=>t.done)];
@@ -296,11 +318,10 @@ function render(){
   document.getElementById('diary').innerHTML=html;
 }
 
-function prevWeek(){wkS=addD(wkS,-7);wkS=getMon(wkS);render()}
-function nextWeek(){wkS=addD(wkS,7);wkS=getMon(wkS);render()}
-function goToday(){wkS=getMon(TODAY);render()}
+function prevWeek(){wkStart=addD(wkStart,-7);render()}
+function nextWeek(){wkStart=addD(wkStart,7);render()}
+function goToday(){wkStart=getMondayOfWeek(TODAY);render()}
 
-wkS=getMon(TODAY);
 render();
 </script>
 </body>
