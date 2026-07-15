@@ -5,114 +5,116 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Karimjee Executive Diary</title>
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Red Hat Text', system-ui, sans-serif;
-  background: #f4f1eb;
-  min-height: 100vh;
-  padding: 16px;
-  color: #333;
-}
-
-#diary-app {
-  max-width: 1400px;
-  margin: 0 auto;
-  background: white;
-  border-radius: 8px;
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  font-family: 'Red Hat Text', system-ui, sans-serif; 
+  background: #f4f1eb; 
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+#app { max-width: 1400px; margin: 0 auto; }
+.header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
   margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #034078;
+  background: white;
+  padding: 15px 20px;
+  border-radius: 8px;
 }
-
-.nav-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-button {
-  padding: 8px 16px;
-  background: #034078;
-  color: white;
-  border: none;
-  border-radius: 4px;
+.nav { display: flex; gap: 10px; }
+button { 
+  padding: 8px 16px; 
+  background: #034078; 
+  color: white; 
+  border: none; 
+  border-radius: 4px; 
   cursor: pointer;
   font-weight: 500;
 }
+button:hover { background: #002d5f; }
 
-button:hover {
-  background: #002d5f;
-}
-
-.week-view {
+.spread {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
   margin-bottom: 20px;
 }
 
+.page {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
 .day-column {
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   overflow: hidden;
+  font-size: 12px;
 }
 
 .day-header {
   background: #034078;
   color: white;
-  padding: 12px;
-  font-weight: bold;
+  padding: 8px 4px;
   text-align: center;
+  font-weight: bold;
+  font-size: 11px;
 }
 
 .day-header.today {
   background: #C9922A;
 }
 
-.day-content {
-  padding: 12px;
-  min-height: 400px;
+.time-slots {
+  max-height: 600px;
+  overflow-y: auto;
   background: #fafaf8;
 }
 
 .time-slot {
-  margin-bottom: 12px;
-  padding: 8px;
-  background: white;
-  border-left: 3px solid #034078;
-  border-radius: 3px;
-  font-size: 13px;
+  display: flex;
+  border-bottom: 1px solid #eee;
+  min-height: 30px;
 }
 
-.time {
-  font-weight: bold;
-  color: #034078;
-  font-size: 12px;
+.time-label {
+  width: 40px;
+  padding: 2px 2px;
+  font-size: 9px;
+  font-weight: 600;
+  color: #666;
+  background: #f0f0f0;
+  border-right: 1px solid #ddd;
+  line-height: 1.2;
 }
 
-.event {
+.time-content {
+  flex: 1;
+  padding: 2px;
+  font-size: 9px;
   color: #333;
-  margin-top: 2px;
+  overflow: hidden;
+  border-right: 1px solid #eee;
+}
+
+.notes-section {
+  padding: 6px;
+  background: #fff9f5;
+  border-top: 1px solid #ddd;
+  min-height: 80px;
+  max-height: 100px;
+  overflow-y: auto;
+  font-size: 10px;
 }
 
 .task {
-  margin-bottom: 8px;
-  padding: 6px 8px;
-  background: white;
-  border-radius: 3px;
-  font-size: 13px;
+  margin: 2px 0;
+  padding: 2px 4px;
+  border-radius: 2px;
 }
 
 .task.urgent {
@@ -130,85 +132,66 @@ button:hover {
   text-decoration: line-through;
 }
 
-.task.mine {
-  color: #111;
-}
-
-.notes-section {
-  background: #fff9f5;
-  padding: 12px;
-  border-radius: 3px;
-  font-size: 12px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.sunday-col {
+.sunday-row {
   grid-column: 1 / -1;
-  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   padding: 12px;
-  border-radius: 6px;
+  background: #f0f0f0;
   margin-top: 10px;
 }
 
-h3 {
+.sunday-row h3 {
   color: #034078;
-  margin: 10px 0 8px 0;
-  font-size: 14px;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.sunday-tasks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sunday-tasks .task {
+  padding: 4px 8px;
+  background: white;
+  border-radius: 3px;
+  border-left: 3px solid #034078;
+  font-size: 11px;
 }
 </style>
 </head>
 <body>
-<div id="diary-app">
+<div id="app">
   <div class="header">
-    <h1>Executive Diary 2026-2027</h1>
-    <div class="nav-buttons">
+    <h1 style="color: #034078; font-size: 20px;">Executive Diary</h1>
+    <div class="nav">
       <button onclick="prevWeek()">← Prev</button>
       <button onclick="goToday()">Today</button>
       <button onclick="nextWeek()">Next →</button>
     </div>
   </div>
-  <div id="diary-content"></div>
+  <div id="diary"></div>
 </div>
 
 <script>
-const DS=new Date("2026-06-15"),DE=new Date("2027-06-14"),TODAY=new Date();TODAY.setHours(0,0,0,0);
+const DS=new Date("2026-06-15"),DE=new Date("2027-06-14");
+let TODAY=new Date();TODAY.setHours(0,0,0,0);
 let wkS=new Date(TODAY);
-const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 const TASKS=[
   {id:"t64",title:"Call Brian",date:"2026-07-05",type:"task",taskType:"urgent",done:false},
-  {id:"t1",title:"Complete group departmental budgets",date:"2026-06-25",type:"task",taskType:"mine",done:true},
   {id:"t11",title:"Follow-up: Mostafa on Auto Inc designs",date:"2026-07-24",type:"task",taskType:"followup",done:false},
   {id:"t12",title:"Check Alley's contract",date:"2026-07-24",type:"task",taskType:"mine",done:false},
-  {id:"t16",title:"Workshop deck",date:"2026-07-06",type:"task",taskType:"urgent",done:true},
   {id:"t20",title:"Add procurement, Marketing, HR & digital workshops",date:"2026-07-16",type:"task",taskType:"mine",done:false},
   {id:"t32",title:"Follow-up: Dhruba on Capex & cost allocation model",date:"2026-07-24",type:"task",taskType:"followup",done:false},
-  {id:"t34",title:"Confirm comp committee",date:"2026-07-06",type:"task",taskType:"mine",done:true},
-  {id:"t35",title:"Confirm workshop attendees",date:"2026-07-07",type:"task",taskType:"mine",done:true},
-  {id:"t37",title:"Tell Mostafa on digital screen",date:"2026-07-06",type:"task",taskType:"followup",done:true},
-  {id:"t38",title:"Discuss P/L & B/S with Amir",date:"2026-07-06",type:"task",taskType:"mine",done:true},
-  {id:"t39",title:"Hawa: Bonus Day input & plan",date:"2026-07-08",type:"task",taskType:"followup",done:true},
-  {id:"t40",title:"Review GCOO team notes",date:"2026-07-06",type:"task",taskType:"mine",done:true},
-  {id:"t41",title:"Confirm wholesale workshop",date:"2026-07-06",type:"task",taskType:"urgent",done:true},
-  {id:"t42",title:"Review Auto Inc PMO",date:"2026-07-06",type:"task",taskType:"urgent",done:true},
   {id:"t44",title:"Prioritize DT & EV tasks",date:"2026-07-14",type:"task",taskType:"mine",done:false},
-  {id:"t45",title:"Complete Auto Inc PMO templates",date:"2026-07-07",type:"task",taskType:"mine",done:true},
-  {id:"t46",title:"Set-up project team with Mostafa",date:"2026-07-07",type:"task",taskType:"mine",done:true},
-  {id:"t47",title:"Arranging meeting every other day",date:"2026-07-13",type:"task",taskType:"mine",done:true},
-  {id:"t48",title:"Include 18 sites target",date:"2026-07-07",type:"task",taskType:"mine",done:true},
-  {id:"t49",title:"Send to Mary/Jennifer the top performers",date:"2026-07-07",type:"task",taskType:"mine",done:true},
-  {id:"t50",title:"Review Comp. charter",date:"2026-07-08",type:"task",taskType:"urgent",done:true},
-  {id:"t51",title:"Process overtime",date:"2026-07-10",type:"task",taskType:"urgent",done:true},
-  {id:"t52",title:"Confirm wholesale workshop",date:"2026-07-08",type:"task",taskType:"urgent",done:true},
-  {id:"t53",title:"Eckhardt's increment",date:"2026-07-13",type:"task",taskType:"urgent",done:true},
-  {id:"t54",title:"Process May corrections",date:"2026-07-10",type:"task",taskType:"urgent",done:true},
-  {id:"t55",title:"Call Mary on overtime",date:"2026-07-10",type:"task",taskType:"followup",done:true},
   {id:"t56",title:"Update AA WBS",date:"2026-07-15",type:"task",taskType:"mine",done:false},
   {id:"t57",title:"Send out Innovatics meeting invites",date:"2026-07-15",type:"task",taskType:"mine",done:false},
-  {id:"t58",title:"Send PMI email",date:"2026-07-14",type:"task",taskType:"mine",done:true},
-  {id:"t59",title:"Send letter of termination 23 April 26 or 28, 01 July notification",date:"2026-07-14",type:"task",taskType:"mine",done:true},
   {id:"t62",title:"Review of LPOs",date:"2026-07-17",type:"task",taskType:"mine",done:false},
   {id:"t63",title:"Prepare Finance deck and comms",date:"2026-07-16",type:"task",taskType:"mine",done:false},
   {id:"t65",title:"Confirm New joiners lunch",date:"2026-07-29",type:"task",taskType:"mine",done:false},
@@ -216,124 +199,107 @@ const TASKS=[
   {id:"t67",title:"Send Amit menu and venue LPO status",date:"2026-07-28",type:"task",taskType:"mine",done:false},
   {id:"t68",title:"Confirm Maria HR equipment",date:"2026-07-20",type:"task",taskType:"mine",done:false},
   {id:"t69",title:"Follow-up: John on costings",date:"2026-07-16",type:"task",taskType:"followup",done:false},
-  {id:"ot1",title:"Send overtime file",date:"2026-06-30",type:"task",taskType:"mine",done:true},
   {id:"ot2",title:"Send overtime file",date:"2026-07-30",type:"task",taskType:"mine",done:false}
 ];
 
 const CAL=[
-  {title:"Weekly GCOO Team Meeting",date:"2026-06-22",startTime:"14:00",endTime:"15:00",type:"meeting",location:"Sokoine Drive Boardroom"},
-  {title:"Weekly GCOO Team Meeting",date:"2026-06-29",startTime:"14:00",endTime:"15:00",type:"meeting",location:"Sokoine Drive Boardroom"},
-  {title:"Cybersecurity Call",date:"2026-06-29",startTime:"13:00",endTime:"14:30",type:"meeting",location:""},
-  {title:"Real Estate Strategy Workshop",date:"2026-07-01",startTime:"08:30",endTime:"13:00",type:"meeting",location:""},
-  {title:"Raphia",date:"2026-07-03",startTime:"09:30",endTime:"10:30",type:"meeting",location:""},
-  {title:"EV Charging Pilot",date:"2026-07-03",startTime:"11:00",endTime:"12:00",type:"meeting",location:""},
-  {title:"John Tracey - AI Project Notes",date:"2026-07-03",startTime:"13:30",endTime:"14:00",type:"meeting",location:""},
-  {title:"Group Operations Team Meeting",date:"2026-07-03",startTime:"14:00",endTime:"15:00",type:"meeting",location:"Teams"},
-  {title:"DT | Initial IT Engagement / RFI Explainer",date:"2026-07-02",startTime:"16:30",endTime:"17:30",type:"meeting",location:""},
-  {title:"Planning: Wholesale Strategy Workshop",date:"2026-07-02",startTime:"15:00",endTime:"16:00",type:"meeting",location:""},
-  {title:"Wholesale Strategy Workshop",date:"2026-07-09",startTime:"08:30",endTime:"17:00",type:"meeting",location:""},
-  {title:"Group Operations Team Meeting",date:"2026-07-10",startTime:"14:00",endTime:"15:00",type:"meeting",location:"Teams"},
-  {title:"Auto Inc briefing",date:"2026-07-10",startTime:"09:00",endTime:"10:00",type:"meeting",location:""},
-  {title:"DT & EV Workshop",date:"2026-07-10",startTime:"10:30",endTime:"12:30",type:"meeting",location:""},
-  {title:"Compensation Committee",date:"2026-07-10",startTime:"12:00",endTime:"12:15",type:"meeting",location:""},
-  {title:"Candidate Search - Real Estate",date:"2026-07-10",startTime:"12:30",endTime:"13:30",type:"meeting",location:""},
-  {title:"Auto Inc Project Planning",date:"2026-07-10",startTime:"16:00",endTime:"17:00",type:"meeting",location:""},
-  {title:"ExCo",date:"2026-07-15",startTime:"08:30",endTime:"09:30",type:"meeting",location:""},
-  {title:"Planning: Finance Strategy Workshop",date:"2026-07-15",startTime:"11:00",endTime:"12:00",type:"meeting",location:""},
-  {title:"Candidate Search - Real Estate",date:"2026-07-15",startTime:"12:30",endTime:"13:30",type:"meeting",location:""},
-  {title:"Finance Strategy Workshop",date:"2026-07-31",startTime:"08:30",endTime:"17:00",type:"meeting",location:""},
-  {title:"Group Operations Team Meeting",date:"2026-07-31",startTime:"14:00",endTime:"15:00",type:"meeting",location:"Teams"},
-  {title:"Group Projects Workshop",date:"2026-07-23",startTime:"09:00",endTime:"17:30",type:"meeting",location:"In person - TBC"}
+  {title:"Weekly GCOO Team Meeting",date:"2026-06-29",start:"14:00",end:"15:00"},
+  {title:"Cybersecurity Call",date:"2026-06-29",start:"13:00",end:"14:30"},
+  {title:"Real Estate Strategy Workshop",date:"2026-07-01",start:"08:30",end:"13:00"},
+  {title:"EV Charging Pilot",date:"2026-07-03",start:"11:00",end:"12:00"},
+  {title:"DT & EV Workshop",date:"2026-07-10",start:"10:30",end:"12:30"},
+  {title:"Auto Inc briefing",date:"2026-07-10",start:"09:00",end:"10:00"},
+  {title:"ExCo",date:"2026-07-15",start:"08:30",end:"09:30"},
+  {title:"Planning: Finance Strategy Workshop",date:"2026-07-15",start:"11:00",end:"12:00"}
 ];
 
 function getMon(d){const c=new Date(d);c.setDate(c.getDate()-(c.getDay()||7)+1);return c}
 function addD(d,n){const c=new Date(d);c.setDate(c.getDate()+n);return c}
-function clamp(d,min,max){return new Date(Math.max(Math.min(d,max),min))}
-function dStr(d){return `${d.getDate()} ${months[d.getMonth()]}`}
+function dStr(d){return d.getDate()+' '+months[d.getMonth()]}
+
+function renderDay(d,dIdx){
+  const isToday=d.toDateString()===TODAY.toDateString();
+  const dayTasks=TASKS.filter(t=>new Date(t.date).toDateString()===d.toDateString());
+  const dayEvents=CAL.filter(e=>new Date(e.date).toDateString()===d.toDateString());
+  
+  let html=`<div class="day-column">
+    <div class="day-header ${isToday?'today':''}">
+      ${days[d.getDay()]} ${dStr(d)}
+    </div>
+    <div class="time-slots">`;
+  
+  // 30-min slots from 07:00 to 20:00
+  for(let h=7;h<20;h++){
+    for(let m=0;m<60;m+=30){
+      const t=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+      const ev=dayEvents.find(e=>e.start<=t&&t<e.end);
+      html+=`<div class="time-slot">
+        <div class="time-label">${t}</div>
+        <div class="time-content">${ev?ev.title:''}</div>
+      </div>`;
+    }
+  }
+  
+  html+=`</div><div class="notes-section">`;
+  
+  const urgentTasks=dayTasks.filter(t=>t.taskType==='urgent'&&!t.done);
+  const followTasks=dayTasks.filter(t=>t.taskType==='followup'&&!t.done);
+  const mineTasks=dayTasks.filter(t=>t.taskType==='mine'&&!t.done);
+  const doneTasks=dayTasks.filter(t=>t.done);
+  
+  [...urgentTasks,...followTasks,...mineTasks,...doneTasks].forEach(t=>{
+    const c=t.done?'done':t.taskType==='urgent'?'urgent':t.taskType==='followup'?'followup':'mine';
+    html+=`<div class="task ${c}">• ${t.title}</div>`;
+  });
+  
+  html+=`</div></div>`;
+  return html;
+}
 
 function render(){
   const we=addD(wkS,6);
-  const tasks=TASKS.filter(t=>{const d=new Date(t.date);return d>=wkS&&d<=we});
-  const events=CAL.filter(e=>{const d=new Date(e.date);return d>=wkS&&d<=we});
+  let html=`<div class="spread">`;
   
-  let html=`<div class="week-view">`;
+  // Left page: Mon-Wed
+  html+=`<div class="page">`;
+  for(let i=1;i<4;i++) html+=renderDay(addD(wkS,i),'mon-wed');
+  html+=`</div>`;
   
-  // Mon-Wed
-  for(let i=0;i<3;i++){
-    const d=addD(wkS,i);
-    const isToday=d.toDateString()===TODAY.toDateString();
-    const dayTasks=tasks.filter(t=>new Date(t.date).toDateString()===d.toDateString());
-    const dayEvents=events.filter(e=>new Date(e.date).toDateString()===d.toDateString());
-    
-    html+=`<div class="day-column">
-      <div class="day-header ${isToday?'today':''}">
-        ${days[d.getDay()]} ${dStr(d)}
-      </div>
-      <div class="day-content">`;
-    
-    dayEvents.forEach(e=>{
-      html+=`<div class="time-slot"><div class="time">${e.startTime}</div><div class="event">${e.title}</div></div>`;
-    });
-    
-    const urgentTasks=dayTasks.filter(t=>t.taskType==='urgent'&&!t.done);
-    const followTasks=dayTasks.filter(t=>t.taskType==='followup'&&!t.done);
-    const mineTasks=dayTasks.filter(t=>t.taskType==='mine'&&!t.done);
-    const doneTasks=dayTasks.filter(t=>t.done);
-    
-    [...urgentTasks,...followTasks,...mineTasks,...doneTasks].forEach(t=>{
-      const c=t.done?'done':t.taskType==='urgent'?'urgent':t.taskType==='followup'?'followup':'mine';
-      html+=`<div class="task ${c}">• ${t.title}</div>`;
-    });
-    
-    html+=`</div></div>`;
-  }
+  // Right page: Thu-Sat
+  html+=`<div class="page">`;
+  for(let i=4;i<7;i++) html+=renderDay(addD(wkS,i),'thu-sat');
+  html+=`</div>`;
   
-  // Thu-Sat
-  for(let i=3;i<6;i++){
-    const d=addD(wkS,i);
-    const isToday=d.toDateString()===TODAY.toDateString();
-    const dayTasks=tasks.filter(t=>new Date(t.date).toDateString()===d.toDateString());
-    const dayEvents=events.filter(e=>new Date(e.date).toDateString()===d.toDateString());
-    
-    html+=`<div class="day-column">
-      <div class="day-header ${isToday?'today':''}">
-        ${days[d.getDay()]} ${dStr(d)}
-      </div>
-      <div class="day-content">`;
-    
-    dayEvents.forEach(e=>{
-      html+=`<div class="time-slot"><div class="time">${e.startTime}</div><div class="event">${e.title}</div></div>`;
-    });
-    
-    const urgentTasks=dayTasks.filter(t=>t.taskType==='urgent'&&!t.done);
-    const followTasks=dayTasks.filter(t=>t.taskType==='followup'&&!t.done);
-    const mineTasks=dayTasks.filter(t=>t.taskType==='mine'&&!t.done);
-    const doneTasks=dayTasks.filter(t=>t.done);
-    
-    [...urgentTasks,...followTasks,...mineTasks,...doneTasks].forEach(t=>{
-      const c=t.done?'done':t.taskType==='urgent'?'urgent':t.taskType==='followup'?'followup':'mine';
-      html+=`<div class="task ${c}">• ${t.title}</div>`;
-    });
-    
-    html+=`</div></div>`;
-  }
+  html+=`</div>`;
   
   // Sunday
   const sun=addD(wkS,6);
-  const isSunToday=sun.toDateString()===TODAY.toDateString();
-  html+=`<div class="sunday-col">
-    <strong style="color:#034078">${days[sun.getDay()]} ${dStr(sun)}</strong>
-  </div>`;
+  const sunTasks=TASKS.filter(t=>new Date(t.date).toDateString()===sun.toDateString());
+  const sunEvents=CAL.filter(e=>new Date(e.date).toDateString()===sun.toDateString());
   
-  html+=`</div>`;
-  document.getElementById('diary-content').innerHTML=html;
+  html+=`<div class="sunday-row">
+    <h3>${days[sun.getDay()]} ${dStr(sun)}</h3>
+    <div class="sunday-tasks">`;
+  
+  const allSunTasks=[...sunTasks.filter(t=>!t.done),...sunTasks.filter(t=>t.done)];
+  allSunTasks.forEach(t=>{
+    const c=t.done?'done':t.taskType==='urgent'?'urgent':t.taskType==='followup'?'followup':'mine';
+    html+=`<div class="task ${c}">• ${t.title}</div>`;
+  });
+  
+  sunEvents.forEach(e=>{
+    html+=`<div class="task" style="border-left: 3px solid #C9922A;">📅 ${e.title} (${e.start})</div>`;
+  });
+  
+  html+=`</div></div>`;
+  
+  document.getElementById('diary').innerHTML=html;
 }
 
-function prevWeek(){wkS=addD(wkS,-7);render()}
-function nextWeek(){wkS=addD(wkS,7);render()}
+function prevWeek(){wkS=addD(wkS,-7);wkS=getMon(wkS);render()}
+function nextWeek(){wkS=addD(wkS,7);wkS=getMon(wkS);render()}
 function goToday(){wkS=getMon(TODAY);render()}
 
-// Set initial week to today's week
 wkS=getMon(TODAY);
 render();
 </script>
