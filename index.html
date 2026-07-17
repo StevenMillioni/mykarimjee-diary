@@ -101,17 +101,17 @@ const TASKS=[
   {id:"t53",title:"Eckhardt's increment",date:"2026-07-13",type:"task",taskType:"urgent",done:true},
   {id:"t47",title:"Arranging meeting every other day",date:"2026-07-13",type:"task",taskType:"mine",done:true},
   {id:"t36",title:"Synthesize real estate workshop",date:"2026-07-13",type:"task",taskType:"mine",done:true},
-  {id:"t44",title:"Prioritize DT & EV tasks",date:"2026-07-14",type:"task",taskType:"mine",done:false},
+  {id:"t44",title:"Prioritize DT & EV tasks",date:"2026-07-14",type:"task",taskType:"mine",done:true},
   {id:"t11",title:"Follow-up: Mostafa on Auto Inc designs",date:"2026-07-14",type:"task",taskType:"followup",done:true},
   {id:"t58",title:"Send PMI email",date:"2026-07-14",type:"task",taskType:"mine",done:true},
   {id:"t59",title:"Send letter of termination 23 April 26 or 28, 01 July notification",date:"2026-07-14",type:"task",taskType:"mine",done:true},
-  {id:"t56",title:"Update AA WBS",date:"2026-07-15",type:"task",taskType:"mine",done:false},
+  {id:"t56",title:"Update AA WBS",date:"2026-07-17",type:"task",taskType:"mine",done:false},
   {id:"t57",title:"Send out Innovatics meeting invites",date:"2026-07-15",type:"task",taskType:"mine",done:false},
-  {id:"t69",title:"Follow-up: John on costings",date:"2026-07-16",type:"task",taskType:"followup",done:false},
-  {id:"t63",title:"Prepare Finance deck and comms",date:"2026-07-16",type:"task",taskType:"mine",done:false},
+  {id:"t69",title:"Follow-up: John on costings",date:"2026-07-16",type:"task",taskType:"followup",done:true},
+  {id:"t63",title:"Prepare Finance deck and comms",date:"2026-07-16",type:"task",taskType:"mine",done:true},
   {id:"t20",title:"Add procurement, Marketing, HR & digital workshops",date:"2026-07-17",type:"task",taskType:"mine",done:false},
   {id:"t19",title:"Corporate calendar update",date:"2026-07-17",type:"task",taskType:"mine",done:false},
-  {id:"t62",title:"Review of LPOs",date:"2026-07-17",type:"task",taskType:"mine",done:false},
+  {id:"t62",title:"Review of LPOs",date:"2026-07-20",type:"task",taskType:"mine",done:false},
   {id:"t60",title:"Maria Masenga - (+255 713 123 743)",date:"2026-07-18",type:"task",taskType:"mine",done:false},
   {id:"t61",title:"Brian (CCO) - +255 713 123 265",date:"2026-07-18",type:"task",taskType:"mine",done:false},
   {id:"t25",title:"Workshop deck",date:"2026-07-20",type:"task",taskType:"mine",done:false},
@@ -133,6 +133,8 @@ const TASKS=[
   {id:"ot11",title:"Send overtime file",date:"2027-04-30",type:"task",taskType:"mine",done:false},
   {id:"ot12",title:"Send overtime file",date:"2027-05-31",type:"task",taskType:"mine",done:false},
   {id:"ot13",title:"Send overtime file",date:"2027-06-30",type:"task",taskType:"mine",done:false},
+,
+  {id:"t70",title:"Send FY26 KPI Comms",date:"2026-08-03",type:"task",taskType:"mine",done:false}
 ];
 const CAL=[
   {"title":"Weekly GCOO Team Meeting","date":"2026-06-15","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
@@ -192,7 +194,7 @@ const CAL=[
   {"title":"PC&D sessions","date":"2026-07-24","startTime":"15:30","endTime":"16:30","type":"meeting","location":"Steven's Office"},
   {"title":"Weekly GCOO Team Meeting","date":"2026-07-27","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
   {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-07-28","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
-  {"title":"Finance Strategy Workshop","date":"2026-07-31","startTime":"08:30","endTime":"17:00","type":"meeting","location":""},
+  {"title":"Finance Strategy Workshop","date":"2026-07-30","startTime":"08:30","endTime":"17:00","type":"meeting","location":""},
   {"title":"Group Operations Team Meeting","date":"2026-07-31","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
   {"title":"Weekly GCOO Team Meeting","date":"2026-08-03","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
   {"title":"1:1 - To Discuss Activities, Problem Areas + Solutions","date":"2026-08-04","startTime":"08:30","endTime":"09:30","type":"meeting","location":"Steven's Office"},
@@ -290,6 +292,17 @@ const CAL=[
   {"title":"Group Operations Team Meeting","date":"2027-04-30","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"},
   {"title":"Weekly GCOO Team Meeting","date":"2027-05-03","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Sokoine Drive Boardroom"},
   {"title":"Group Operations Team Meeting","date":"2027-05-07","startTime":"14:00","endTime":"15:00","type":"meeting","location":"Teams"}
+,
+  {"title": "EV Charging: Sponsor/Facilities/Engineering", "date": "2026-07-21", "startTime": "09:00", "endTime": "10:00", "type": "meeting", "location": ""},
+  {"title": "DT Progress Review", "date": "2026-07-21", "startTime": "10:00", "endTime": "11:00", "type": "meeting", "location": ""},
+  {"title": "EV Charging: Compliance and Permitting", "date": "2026-07-21", "startTime": "11:00", "endTime": "12:00", "type": "meeting", "location": ""},
+  {"title": "EV Charging: Procurement/Supply", "date": "2026-07-22", "startTime": "09:00", "endTime": "11:00", "type": "meeting", "location": ""},
+  {"title": "EV Charging Site Walkthrough", "date": "2026-07-22", "startTime": "12:00", "endTime": "13:00", "type": "meeting", "location": ""},
+  {"title": "EV Charging: Sponsor/Operations", "date": "2026-07-23", "startTime": "09:00", "endTime": "10:00", "type": "meeting", "location": ""},
+  {"title": "DT Followup", "date": "2026-07-23", "startTime": "10:00", "endTime": "11:00", "type": "meeting", "location": ""},
+  {"title": "EV Charging: Marketing & CX", "date": "2026-07-23", "startTime": "11:00", "endTime": "12:00", "type": "meeting", "location": ""},
+  {"title": "DT/EV Open Items", "date": "2026-07-24", "startTime": "09:00", "endTime": "10:00", "type": "meeting", "location": ""},
+  {"title": "Project Steering Committee", "date": "2026-07-28", "startTime": "09:00", "endTime": "17:30", "type": "meeting", "location": ""}
 ];
 
 let TODAY = new Date();
