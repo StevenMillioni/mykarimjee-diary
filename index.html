@@ -37,7 +37,7 @@ body { font-family: 'Red Hat Text', -apple-system, BlinkMacSystemFont, 'Segoe UI
 .day-header.today { background: #C9922A; }
 .day-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 .day-times { flex: 1; overflow-y: auto; background: #fafaf8; position: relative; }
-.time-slot { display: flex; border-bottom: 1px solid #eee; min-height: 17px; position: relative; }
+.time-slot { display: flex; border-bottom: 1px solid #eee; height: 17px; position: relative; box-sizing: border-box; }
 .time-label { width: 24px; padding: 1px 2px; font-size: 8px; color: #999; background: #f5f5f5; border-right: 1px solid #ddd; text-align: right; flex-shrink: 0; line-height: 1.1; }
 .time-content { flex: 1; padding: 1px 3px; font-size: 8px; color: #333; position: relative; overflow: hidden; }
 .event { position: absolute; background: #034078; color: white; font-size: 7px; padding: 1px 3px; border-left: 2px solid #C9922A; border-radius: 2px; overflow: hidden; }
@@ -395,7 +395,7 @@ function renderDay(date, isLast) {
   const isT = ds === fmtYMD(TODAY);
   
   const dayTasks = TASKS.filter(t => t.date === ds && t.type === 'task');
-  const dayMeetings = CAL.filter(e => e.date === ds && e.type !== "task");
+  const dayMeetings = CAL.filter(e => e.date === ds && e.startTime && e.endTime);
   
   const ur = dayTasks.filter(t => t.taskType === "urgent" && !t.done);
   const fl = dayTasks.filter(t => t.taskType === "followup" && !t.done);
@@ -412,32 +412,48 @@ function renderDay(date, isLast) {
     else if(t.taskType === "followup") c = "note-followup";
     notesHTML += `<div class="note-item ${c}">• ${t.title}</div>`;
   });
-  while(allTasks.length < 10) {
+  let padCount = allTasks.length;
+  while(padCount < 10) {
     notesHTML += `<div class="note-item" style="color: transparent;">—</div>`;
-    allTasks.push({});
+    padCount++;
   }
   
-  let timesHTML = "";
+  const SH = 17; // px per 30-min slot, must match CSS row height
+  const GRID_START_MIN = 7 * 60;
+  const SLOT_COUNT = 26; // 07:00 to 20:00 in 30-min steps
+  
+  let gridHTML = "";
   for(let h = 7; h < 20; h++) {
     for(let m = 0; m < 60; m += 30) {
       const time = String(h).padStart(2,"0") + ":" + String(m).padStart(2,"0");
-      const meeting = dayMeetings.find(e => e.startTime && e.endTime && e.startTime <= time && time < e.endTime);
-      timesHTML += `
+      gridHTML += `
         <div class="time-slot">
           <div class="time-label">${m===0 ? time : ""}</div>
-          <div class="time-content">
-            ${meeting ? `<div class="event" title="${meeting.title}">${meeting.title}</div>` : ""}
-          </div>
+          <div class="time-content"></div>
         </div>
       `;
     }
   }
   
+  function toMin(t) {
+    const [hh, mm] = t.split(":").map(Number);
+    return hh * 60 + mm;
+  }
+  
+  let eventsOverlay = "";
+  dayMeetings.forEach(e => {
+    const startMin = toMin(e.startTime);
+    const endMin = toMin(e.endTime);
+    const top = Math.round(((startMin - GRID_START_MIN) / 30) * SH);
+    const height = Math.max(SH, Math.round(((endMin - startMin) / 30) * SH));
+    eventsOverlay += `<div class="event" style="position:absolute; top:${top}px; left:26px; right:2px; height:${height}px;" title="${e.title}">${e.title}</div>`;
+  });
+  
   return `
     <div class="day">
       <div class="day-header ${isT ? "today" : ""}">${DN[(date.getDay() === 0 ? 6 : date.getDay()-1)]} ${date.getDate()} ${MS[date.getMonth()]}</div>
       <div class="day-content">
-        <div class="day-times">${timesHTML}</div>
+        <div class="day-times" style="position:relative;">${gridHTML}${eventsOverlay}</div>
         <div class="day-notes">${notesHTML}</div>
       </div>
     </div>
