@@ -393,7 +393,7 @@ function renderDay(date, isLast) {
   const ds = fmtYMD(date);
   const isT = ds === fmtYMD(TODAY);
   
-  const dayTasks = TASKS.filter(t => t.date === ds);
+  const dayTasks = TASKS.filter(t => t.date === ds && t.type !== 'meeting');
   const dayMeetings = CAL.filter(e => e.date === ds);
   
   const ur = dayTasks.filter(t => t.taskType === "urgent" && !t.done);
