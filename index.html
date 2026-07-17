@@ -394,7 +394,7 @@ function renderDay(date, isLast) {
   const isT = ds === fmtYMD(TODAY);
   
   const dayTasks = TASKS.filter(t => t.date === ds && t.type !== 'meeting');
-  const dayMeetings = CAL.filter(e => e.date === ds);
+  const dayMeetings = CAL.filter(e => e.date === ds && e.type !== "task");
   
   const ur = dayTasks.filter(t => t.taskType === "urgent" && !t.done);
   const fl = dayTasks.filter(t => t.taskType === "followup" && !t.done);
@@ -434,7 +434,7 @@ function renderDay(date, isLast) {
   
   return `
     <div class="day">
-      <div class="day-header ${isT ? "today" : ""}">${DN[date.getDay()-1 || 6]} ${date.getDate()} ${MS[date.getMonth()]}</div>
+      <div class="day-header ${isT ? "today" : ""}">${DN[(date.getDay() === 0 ? 6 : date.getDay()-1)]} ${date.getDate()} ${MS[date.getMonth()]}</div>
       <div class="day-content">
         <div class="day-times">${timesHTML}</div>
         <div class="day-notes">${notesHTML}</div>
